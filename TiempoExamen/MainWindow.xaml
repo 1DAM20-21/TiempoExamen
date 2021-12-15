@@ -1,0 +1,97 @@
+﻿<Window x:Class="TiempoExamen.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TiempoExamen"
+        mc:Ignorable="d"
+        Title="Tiempo" Height="450" Width="800" Icon="/assets/sun_weather.ico">
+    <Window.Resources>
+        <local:ConvertidorImagenes x:Key="convertidorSoureImagen"></local:ConvertidorImagenes>
+        <Style TargetType="TextBlock"
+               x:Key="TituloPrograma">
+            <Setter Property="FontFamily"
+                    Value="Segoe UI Black"></Setter>
+            <Setter Property="FontSize"
+                    Value="48"></Setter>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground">
+                <Setter.Value>
+                    <LinearGradientBrush EndPoint="0.5,1"
+                                         StartPoint="0.5,0">
+                        <GradientStop Color="Black"
+                                      Offset="1" />
+                        <GradientStop Color="White"
+                                      Offset="0.448" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <DataTemplate x:Name="PlantillaItemsPrediccion"
+            DataType="{x:Type local:PrediccionDia}">
+            <Border BorderThickness="1"
+                    BorderBrush="Black"
+                    Background="AliceBlue"
+                    Height="180"
+                    Width="200"
+                    Margin="10"
+                    Padding="10,0,10,5">
+                <Border.Effect>
+                <DropShadowEffect></DropShadowEffect>
+                </Border.Effect>
+                <StackPanel>
+                    <Viewbox Height="40">
+                        <TextBlock Text="{Binding Path=Dia}"></TextBlock>
+                    </Viewbox>
+                    <Image 
+                           Source="{Binding Path=Prediccion, Converter={StaticResource convertidorSoureImagen}}"
+                           Margin="10,0,10,10"
+                           Width="50"
+                           Height="50"
+                           Stretch="UniformToFill"></Image>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Path= MinimaFarenheit}"></TextBlock>
+                    <TextBlock Text="°"></TextBlock>
+                    <TextBlock Text="/"></TextBlock>
+                        <TextBlock Text="{Binding Path= MaximaFarenheit}"></TextBlock>
+                    <TextBlock Text="°"></TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
+
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Left">
+        <ListBox x:Name="PrediccionTiempo"
+                     Grid.Column="0"
+                     ItemsSource="{Binding Path=ListaPrediccionDia}"
+                     SelectedItem="{}"
+                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                     ScrollViewer.VerticalScrollBarVisibility="Visible"
+                     Margin="10">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+        </StackPanel>
+        <StackPanel DockPanel.Dock="Top">
+            <TextBlock HorizontalAlignment="Center"
+                       Style="{StaticResource TituloPrograma}"
+                       Text="El tiempo en New York">
+            </TextBlock>
+        </StackPanel>
+        <StackPanel DockPanel.Dock="Bottom">
+            <TextBlock></TextBlock>
+        </StackPanel>
+            <Image Source="/assets/newyork1.jpg"></Image>
+            
+    </DockPanel>
+</Window>
