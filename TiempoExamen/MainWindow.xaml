@@ -166,7 +166,7 @@
 
         </Grid>
         
-        <Image x:Name="ImagenCentro" Style="{StaticResource ImagenCentro}" Stretch="UniformToFill"></Image>
+        <Image x:Name="ImagenCentro" Style="{StaticResource ImagenCentro}" Stretch="Fill"></Image>
 
     </DockPanel>
 </Window>
