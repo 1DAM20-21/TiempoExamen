@@ -52,16 +52,11 @@ namespace TiempoExamen
         {
             Dia = dia;
             Prediccion = prediccion;
-            MinimaFarenheit = PasarAGradosFarhenhaid(minimaFarenheit);
-            MaximaFarenheit = PasarAGradosFarhenhaid(maximaFarenheit);
+            MinimaFarenheit = minimaFarenheit;
+            MaximaFarenheit = maximaFarenheit;
         }
 
-           public int PasarAGradosFarhenhaid(int Farenheit)
-        {
-             int Grados = (int)((MinimaFarenheit - 32)/ 1.8);
-            return Grados;
-        }
-
+         
        
 
 

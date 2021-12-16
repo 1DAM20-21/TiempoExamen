@@ -5,9 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TiempoExamen"
         mc:Ignorable="d"
-        Title="Tiempo" Height="450" Width="800" Icon="/assets/sun_weather.ico">
+        Title="Tiempo"
+        Height="450"
+        Width="800"
+        MinWidth="900"
+        MinHeight="500"
+        Icon="/assets/sun_weather.ico">
     <Window.Resources>
-        <local:ConvertidorImagenes x:Key="convertidorSoureImagen"></local:ConvertidorImagenes>
+        <local:ConvertidorFarenhaid x:Key="convertidorDeFarenhaid"></local:ConvertidorFarenhaid>
+        
         <Style TargetType="TextBlock"
                x:Key="TituloPrograma">
             <Setter Property="FontFamily"
@@ -31,35 +37,65 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
+        <Style TargetType="Image" x:Key="PrediccionImagen">
+            <Setter Property="Width" Value="100"></Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=Prediccion}"
+                             Value="sol">
+                    <Setter Property="Source"
+                            Value="assets/sunny.png"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=Prediccion}"
+                             Value="nubes">
+                    <Setter Property="Source"
+                            Value="assets/cloudy.png"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=Prediccion}"
+                             Value="nieve">
+                    <Setter Property="Source"
+                            Value="assets/snow.png"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=Prediccion}"
+                             Value="lluvia">
+                    <Setter Property="Source"
+                            Value="assets/rain.png"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="{x:Type Image}" x:Key="ImagenCentro">
+            <Setter Property="Source" Value="assets/newyork1.jpg"></Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=ImagenCentro, Path=IsMouseOver}" Value="True">
+                    <Setter Property="Source"
+                            Value="assets/newyork2.jpg"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
         <DataTemplate x:Name="PlantillaItemsPrediccion"
-            DataType="{x:Type local:PrediccionDia}">
+                      DataType="{x:Type local:PrediccionDia}">
             <Border BorderThickness="1"
                     BorderBrush="Black"
-                    Background="AliceBlue"
-                    Height="180"
-                    Width="200"
                     Margin="10"
-                    Padding="10,0,10,5">
+                    Padding="10,0,10,5"
+                    Width="150"
+                    Background="#80CEE1">
                 <Border.Effect>
-                <DropShadowEffect></DropShadowEffect>
+                    <DropShadowEffect></DropShadowEffect>
                 </Border.Effect>
-                <StackPanel>
-                    <Viewbox Height="40">
-                        <TextBlock Text="{Binding Path=Dia}"></TextBlock>
-                    </Viewbox>
-                    <Image 
-                           Source="{Binding Path=Prediccion, Converter={StaticResource convertidorSoureImagen}}"
+                <StackPanel VerticalAlignment="Center"
+                            HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding Path=Dia}"></TextBlock>
+                    <Image Style="{StaticResource PrediccionImagen}"
                            Margin="10,0,10,10"
                            Width="50"
                            Height="50"
                            Stretch="UniformToFill"></Image>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Path= MinimaFarenheit}"></TextBlock>
-                    <TextBlock Text="°"></TextBlock>
-                    <TextBlock Text="/"></TextBlock>
-                        <TextBlock Text="{Binding Path= MaximaFarenheit}"></TextBlock>
-                    <TextBlock Text="°"></TextBlock>
+                        <TextBlock Text="{Binding Path= MinimaFarenheit, Converter={StaticResource convertidorDeFarenhaid}}"></TextBlock>
+                        <TextBlock Text="°"></TextBlock>
+                        <TextBlock Text="/"></TextBlock>
+                        <TextBlock Text="{Binding Path= MaximaFarenheit, Converter={StaticResource convertidorDeFarenhaid}}"></TextBlock>
+                        <TextBlock Text="°"></TextBlock>
                     </StackPanel>
                 </StackPanel>
             </Border>
@@ -67,31 +103,70 @@
     </Window.Resources>
 
     <DockPanel>
-        <StackPanel DockPanel.Dock="Left">
         <ListBox x:Name="PrediccionTiempo"
-                     Grid.Column="0"
-                     ItemsSource="{Binding Path=ListaPrediccionDia}"
-                     SelectedItem="{}"
-                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                     ScrollViewer.VerticalScrollBarVisibility="Visible"
-                     Margin="10">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel />
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-            </ListBox>
-        </StackPanel>
+                 ItemsSource="{Binding Path=ListaPrediccionDia}"
+                 SelectedItem="{Binding Path= DiaSeleccionado}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.VerticalScrollBarVisibility="Visible"
+                 Margin="10">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
         <StackPanel DockPanel.Dock="Top">
             <TextBlock HorizontalAlignment="Center"
                        Style="{StaticResource TituloPrograma}"
                        Text="El tiempo en New York">
             </TextBlock>
         </StackPanel>
-        <StackPanel DockPanel.Dock="Bottom">
-            <TextBlock></TextBlock>
-        </StackPanel>
-            <Image Source="/assets/newyork1.jpg"></Image>
+        <Grid DockPanel.Dock="Bottom" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Dia" Grid.Column="0" Grid.Row="0"></TextBlock>
+            <TextBox Text="{Binding Path= DiaSeleccionado.Dia}"
+                     Grid.Column="1"
+                     Grid.Row="0"
+                     Template="{DynamicResource TextBoxControlTemplate1}"></TextBox>
             
+            <TextBlock Text="Prediccion"
+                       Grid.Column="0"
+                       Grid.Row="1"></TextBlock>
+            
+            <TextBox Text="{Binding Path= DiaSeleccionado.Prediccion}"
+                     Grid.Column="1"
+                     Grid.Row="1"
+                     Template="{DynamicResource TextBoxControlTemplate1}"></TextBox>
+            
+            <TextBlock Text="Minima (F)"
+                       Grid.Column="0"
+                       Grid.Row="2"></TextBlock>
+            <TextBox Text="{Binding Path= DiaSeleccionado.MinimaFarenheit}"
+                     Grid.Column="1"
+                     Grid.Row="2"
+                     Template="{DynamicResource TextBoxControlTemplate1}"></TextBox>
+
+            <TextBlock Text="Maxima(F)"
+                       Grid.Column="0"
+                       Grid.Row="3"></TextBlock>
+            <TextBox Text="{Binding Path= DiaSeleccionado.MaximaFarenheit}" 
+                     Grid.Row="3" 
+                     Grid.Column="1"
+                     Template="{DynamicResource TextBoxControlTemplate1}"></TextBox>
+
+        </Grid>
+        
+        <Image x:Name="ImagenCentro" Style="{StaticResource ImagenCentro}" Stretch="UniformToFill"></Image>
+
     </DockPanel>
 </Window>
